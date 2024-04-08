@@ -1,34 +1,90 @@
 package com.controller;
 
+import com.data.BookingTable;
 import com.model.Booking;
-import com.model.Trip;
+import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import java.time.LocalDate;
 
 public class BookingController {
-    private Booking book;
+    @FXML
+    private TextField bookingIdField;
+    @FXML
+    private TextField userIdField;
+    @FXML
+    private TextField tripIdField;
+    @FXML
+    private DatePicker tripDateField;
 
-    public void addBooking() {
-        this.book.add();
-        this.book = null;
+    private BookingTable bookingTable;
+
+    public BookingController() {
+        try {
+            this.bookingTable = new BookingTable();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the exception (e.g., show an alert dialog)
+        }
     }
 
-    public void delBooking() {
-        this.book.del();
-        this.book = null;
+    @FXML
+    protected void addBooking() {
+        try {
+            String bookingID = bookingIdField.getText();
+            String userID = userIdField.getText();
+            String tripID = tripIdField.getText();
+            LocalDate tripDate = tripDateField.getValue();
+
+            Booking booking = new Booking(bookingID, userID, tripID, tripDate);
+            bookingTable.save(booking);
+            // Update UI or show confirmation message
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the exception (e.g., show an error message)
+        }
     }
 
-    public void setBooking(String id, Trip trip) {
-        this.book = new Booking(id, trip);
+    @FXML
+    protected void deleteBooking() {
+        try {
+            String bookingID = bookingIdField.getText();
+            bookingTable.deleteBooking(bookingID);
+            // Update UI or show confirmation message
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the exception (e.g., show an error message)
+        }
     }
 
-    public void findBooking(String id, String type, String date) {
-        book.find(id, type, date);
+    @FXML
+    protected void findBooking() {
+        try {
+            String bookingID = bookingIdField.getText();
+            Booking booking = bookingTable.findById(bookingID);
+            if (booking != null) {
+                userIdField.setText(booking.getUserID());
+                tripIdField.setText(booking.getTripID());
+                tripDateField.setValue(booking.getTripDate());
+            } else {
+                // Show a message that the booking was not found
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the exception (e.g., show an error message)
+        }
     }
 
-    public Booking getBooking() {
-        return book;
+    @FXML
+    protected void clearFields() {
+        bookingIdField.clear();
+        userIdField.clear();
+        tripIdField.clear();
+        tripDateField.setValue(null);
     }
 
-    public Booking[] findBooking(String id) {
-        return new Booking[0];
+    public void close() {
+        bookingTable.disCon();
     }
+
 }

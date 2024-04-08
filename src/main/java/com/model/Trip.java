@@ -1,77 +1,35 @@
 package com.model;
 
+import javafx.beans.property.*;
 import java.time.LocalDate;
 
-public class Trip{
-    private String type;
-    private String location;
-    private char date;
-    private Pay price;
+public class Trip {
+    private SimpleStringProperty tripID = new SimpleStringProperty(this, "tripID");
+    private SimpleStringProperty location = new SimpleStringProperty(this, "location");
+    private ObjectProperty<LocalDate> tripDate = new SimpleObjectProperty<>(this, "tripDate");
+    private SimpleIntegerProperty price = new SimpleIntegerProperty(this, "price");
 
-    public Trip(String type, String location, String date, Pay price){
-	    getTrip(type, location);
+    public Trip(String tripID, String location, LocalDate tripDate, int price) {
+        this.tripID.set(tripID);
+        this.location.set(location);
+        this.tripDate.set(tripDate);
+        this.price.set(price);
     }
 
-    public Trip(String tripName, String location, LocalDate tripDate, Pay price) {
-        addTrip(tripName, location,tripDate, price);
-    }
+    // Getters and Setters for JavaFX properties
+    public String getTripID() { return tripID.get(); }
+    public void setTripID(String tripID) { this.tripID.set(tripID); }
+    public SimpleStringProperty tripIDProperty() { return tripID; }
 
-    private void addTrip(String type, String location, LocalDate date, Pay price) {
-    }
+    public String getLocation() { return location.get(); }
+    public void setLocation(String location) { this.location.set(location); }
+    public SimpleStringProperty locationProperty() { return location; }
 
-    private void getTrip(String type, String location) {
-    }
+    public LocalDate getTripDate() { return tripDate.get(); }
+    public void setTripDate(LocalDate tripDate) { this.tripDate.set(tripDate); }
+    public ObjectProperty<LocalDate> tripDateProperty() { return tripDate; }
 
-    protected void SetType(String name){
-	type = name;
-    }
-
-    public String getType(){
-	return type;
-    }
-
-    protected void setLocation(String name){
-	location = name;
-    }
-
-    public String getlocation(){
-	return location;
-    }
-
-    protected void setDate(char day){
-	date = day;
-    }
-
-    public char getDate(){
-	return date;
-    }
-
-    protected void setPrice(Pay p){
-	price = p;
-    }
-
-    public Pay getPrice(){
-	return price;
-    }
-
-    public LocalDate getTripDate() {
-        return null;
-    }
-
-    public String getName() {
-        return null;
-    }
-
-    public void find(String type, String date) throws Exception {
-    }
-
-    public void del(){
-        // Test print fyir test case, a eftir ad implementa
-        System.out.println("Trip deleted");
-    }
-
-    public void add(String type, String location, String date, Pay price){
-        // Test print fyir test case, a eftir ad implementa
-        System.out.println("Trip added");
-    }
+    public int getPrice() { return price.get(); }
+    public void setPrice(int price) { this.price.set(price); }
+    public SimpleIntegerProperty priceProperty() { return price; }
 }

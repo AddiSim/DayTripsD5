@@ -1,67 +1,34 @@
 package com.model;
 
-import com.controller.BookingController;
-import com.model.Booking;
+import javafx.beans.property.SimpleStringProperty;
 
 public class User {
-    private String id;
-    private String password; // Change to String for better password handling
-    private String fName;
-    private String lName;
-    private Booking[] booking;
-    private int countBooking;
+    private SimpleStringProperty id = new SimpleStringProperty(this, "id");
+    private SimpleStringProperty password = new SimpleStringProperty(this, "password");
+    private SimpleStringProperty firstName = new SimpleStringProperty(this, "firstName");
+    private SimpleStringProperty lastName = new SimpleStringProperty(this, "lastName");
 
-    public User(String id, String password, String fName, String lName) {
-        setId(id);
-        setPassword(password);
-        setFName(fName);
-        setLName(lName);
-        setBooking();
+    public User(String id, String password, String firstName, String lastName) {
+        this.id.set(id);
+        this.password.set(password);
+        this.firstName.set(firstName);
+        this.lastName.set(lastName);
     }
 
-    protected void setId(String id) {
-        this.id = id;
-    }
+    // Getters and Setters
+    public String getId() { return id.get(); }
+    public void setId(String id) { this.id.set(id); }
+    public SimpleStringProperty idProperty() { return id; }
 
-    public String getId() {
-        return id;
-    }
+    public String getPassword() { return password.get(); }
+    public void setPassword(String password) { this.password.set(password); }
+    public SimpleStringProperty passwordProperty() { return password; }
 
-    private void setFName(String name) {
-        fName = name;
-    }
+    public String getFirstName() { return firstName.get(); }
+    public void setFirstName(String firstName) { this.firstName.set(firstName); }
+    public SimpleStringProperty firstNameProperty() { return firstName; }
 
-    public String getFName() {
-        return fName;
-    }
-
-    private void setLName(String name) {
-        lName = name;
-    }
-
-    public String getLName() {
-        return lName;
-    }
-
-    private void updateBooking() {
-        setBooking();
-    }
-
-    private void setBooking() {
-        BookingController book = new BookingController();
-        this.booking = book.findBooking(this.id);
-    }
-
-
-    public Booking[] getBooking() {
-        return this.booking;
-    }
-
-    private void setPassword(String pw) {
-        this.password = pw;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    public String getLastName() { return lastName.get(); }
+    public void setLastName(String lastName) { this.lastName.set(lastName); }
+    public SimpleStringProperty lastNameProperty() { return lastName; }
 }

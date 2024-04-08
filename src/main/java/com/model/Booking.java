@@ -1,56 +1,39 @@
 package com.model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import java.time.LocalDate;
 
 public class Booking {
-    private String id;
-    private Trip trip;
+    private SimpleStringProperty bookingID = new SimpleStringProperty(this, "bookingID");
+    private SimpleStringProperty userID = new SimpleStringProperty(this, "userID");
+    private SimpleStringProperty tripID = new SimpleStringProperty(this, "tripID");
+    private ObjectProperty<LocalDate> tripDate = new SimpleObjectProperty<>(this, "tripDate");
 
-    public Booking(String id, Trip trip) {
-        this.id = id;
-        this.trip = trip;
+    public Booking(String bookingID, String userID, String tripID, LocalDate tripDate) {
+        this.bookingID.set(bookingID);
+        this.userID.set(userID);
+        this.tripID.set(tripID);
+        this.tripDate.set(tripDate);
     }
 
-    public void updateTrip(Trip t) {
-        trip = t;
-    }
+    // Getters and Setters for JavaFX properties
+    public String getBookingID() { return bookingID.get(); }
+    public void setBookingID(String bookingID) { this.bookingID.set(bookingID); }
+    public SimpleStringProperty bookingIDProperty() { return bookingID; }
 
-    public Trip getTripObject() {
-        return trip;
+    public String getUserID() {
+        return userID.get();
     }
+    public void setUserID(String userID) { this.userID.set(userID); }
+    public SimpleStringProperty userIDProperty() { return userID; }
 
-    public String getTrip() {
-        return trip.toString();
-    }
+    public String getTripID() { return tripID.get(); }
+    public void setTripID(String tripID) { this.tripID.set(tripID); }
+    public SimpleStringProperty tripIDProperty() { return tripID; }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getUserId() {
-        return id; // Assuming the ID is the user ID
-    }
-
-    public LocalDate getTripDate() {
-        return trip.getTripDate();
-    }
-
-    public String getTripName() {
-        return trip.getName();
-    }
-
-    public void add() {
-        // Test print fyir test case, a eftir ad implementa
-        System.out.println("Booking Added");
-    }
-
-    public void del() {
-        // Test print fyir test case, a eftir ad implementa
-        System.out.println("Booking Deleted");
-    }
-
-    public void find(String id, String type, String date) {
-        // Test print fyir test case, a eftir ad implementa
-        System.out.println("Finding booking with id " + id + "type " + type + "and date " + date);
-    }
+    public LocalDate getTripDate() { return tripDate.get(); }
+    public void setTripDate(LocalDate tripDate) { this.tripDate.set(tripDate); }
+    public ObjectProperty<LocalDate> tripDateProperty() { return tripDate; }
 }

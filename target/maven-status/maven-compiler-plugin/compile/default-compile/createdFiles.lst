@@ -2,6 +2,7 @@ com\model\PayGBP.class
 com\model\Booking.class
 com\model\PayEuro.class
 com\model\UserInt.class
+com\controller\Main.class
 com\data\BookingTable.class
 com\data\TripTable.class
 com\model\Pay.class
@@ -14,4 +15,5 @@ com\data\UserTable.class
 com\model\TripInt.class
 com\controller\TripController.class
 com\model\PayUSD.class
+com\data\DatabaseSetup.class
 com\model\Trip.class

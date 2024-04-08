@@ -1,24 +1,46 @@
 package com.controller;
 
-import com.model.Pay;
+import com.data.TripTable;
 import com.model.Trip;
 
-public class TripController{
+import java.time.LocalDate;
+
+public class TripController {
     Trip trip;
+    TripTable tripTable;
 
-    public void makeTrip(String type, String location, String date, Pay price) throws Exception {
-	this.trip.add(type, location, date, price);
+    public void createTrip(String tripID, String location, String date, int price) {
+        try {
+            trip = new Trip(tripID, location, LocalDate.parse(date), price);
+            tripTable.save(trip);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void findTrip(String type, String date) throws Exception {
-	this.trip.find(type, date);
+    public void deleteTrip(String tripID) {
+        try {
+            tripTable.deleteTrip(tripID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void delTrip() throws Exception {
-	this.trip.del();
+    public Trip findTrip(String tripID) {
+        try {
+            return tripTable.findById(tripID);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public Trip getTrip(){
-	return this.trip;
+    public void updateTrip(String tripID, String location, String date, int price) {
+        try {
+            trip = new Trip(tripID, location, LocalDate.parse(date), price);
+            tripTable.update(trip);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,103 +1,82 @@
 package com.data;
 
+import com.model.Booking;
+import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.*;
 import java.time.LocalDate;
-import com.model.Trip;
-import com.model.Booking;
 
 public class BookingTable {
 	private Connection conn;
 
-	public BookingTable(String[] args) throws Exception {
-		getCon();
+	public BookingTable() throws Exception {
+		this.conn = getCon();
 	}
 
-	public void getCon() throws Exception {
+	private Connection getCon() throws Exception {
+		Dotenv dotenv = Dotenv.load();
+		String dbUrl = dotenv.get("DB_URL");
+		String user = dotenv.get("DB_USER");
+		String password = dotenv.get("DB_PASSWORD");
 		try {
 			Class.forName("org.postgresql.Driver");
-			java.util.Properties props = new java.util.Properties();
-			props.setProperty("user", "User_Name");
-			props.setProperty("password", "User_Password");
-			conn = DriverManager.getConnection("jdbc:postgresql:database", props);
-		} catch (Exception e) {
-			try {
-				Class.forName("org.sqlite.JDBC");
-				conn = DriverManager.getConnection("jdbc:sqlite:database.db");
-			} catch (Exception e2) {
-				conn = DriverManager.getConnection("jdbc:odbc:database");
-			}
-		}
-	}
-
-	public void save(Booking b) {
-		try {
-			PreparedStatement statement = conn.prepareStatement("INSERT INTO Booking (ID, trip, tripDate) Values (?, ?, ?)");
-			statement.setString(1, b.getUserId());
-			statement.setString(2, b.getTrip());
-			statement.setDate(3, Date.valueOf(b.getTripDate()));
-			statement.executeUpdate();
-		} catch (SQLException e) {
+			return DriverManager.getConnection(dbUrl, user, password);
+		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
 
-	public Booking findById(int id, String tripName, LocalDate tripDate) {
-		try {
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM Booking WHERE ID = ? AND trip = ? AND tripDate = ?");
-			statement.setInt(1, id);
-			statement.setString(2, tripName);
-			statement.setDate(3, Date.valueOf(tripDate));
+	public void save(Booking b) throws SQLException {
+		String sql = "INSERT INTO Bookings (BookingID, UserID, TripID, TripDate) VALUES (?, ?, ?, ?)";
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, b.getBookingID());
+			statement.setString(2, b.getUserID());
+			statement.setString(3, b.getTripID());
+			statement.setDate(4, Date.valueOf(b.getTripDate()));
+			statement.executeUpdate();
+		}
+	}
+
+	public Booking findById(String bookingID) throws SQLException {
+		String sql = "SELECT * FROM Bookings WHERE BookingID = ?";
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, bookingID);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
-				Trip trip = new Trip(tripName, rs.getString("location"), tripDate, null); // Assuming you have a constructor for Trip
-				return new Booking(rs.getString("ID"), trip);
+				return new Booking(rs.getString("BookingID"), rs.getString("UserID"), rs.getString("TripID"), rs.getDate("TripDate").toLocalDate());
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return null;
 	}
 
-
-	public void update(Booking b) {
-		try{
-			PreparedStatement statement= conn.prepareStatement("UPDATE Booking SET trip = ?, tripDate = ? WHERE ID = ?");
-			statement.setString(1, b.getTrip());
-			statement.setDate(2, Date.valueOf(b.getTripDate()));
-			statement.setString(3, b.getUserId());
+	public void deleteBooking(String bookingID) throws SQLException {
+		String sql = "DELETE FROM Bookings WHERE BookingID = ?";
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, bookingID);
 			statement.executeUpdate();
-		}catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 
-	public void delete(int id, String trip, LocalDate tripDate) {
-		try{
-			PreparedStatement statement = conn.prepareStatement("DELETE FROM Booking WHERE ID = ? AND trip = ? AND tripDate = ?");
-			statement.setString(1, String.valueOf(id));
-			statement.setString(2,trip);
-			statement.setDate(3,Date.valueOf(tripDate));
-
-		}catch (SQLException e){
-			e.printStackTrace();
+	public boolean isValid(String bookingID, String userID, String tripID, LocalDate tripDate) throws SQLException {
+		String sql = "SELECT COUNT(*) FROM Bookings WHERE BookingID = ? AND UserID = ? AND TripID = ? AND TripDate = ?";
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, bookingID);
+			statement.setString(2, userID);
+			statement.setString(3, tripID);
+			statement.setDate(4, Date.valueOf(tripDate));
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			return rs.getInt(1) > 0;
 		}
-
-	}
-
-	public void add(String id, Trip trip) {
 	}
 
 	public void disCon() {
-	}
-
-	public void del(String id, Trip trip) {
-	}
-
-	public boolean ifContensBooking(String id, String type, char date) {
-		return false;
-	}
-
-	public boolean ifContentsBooking(String id, String type, char date) {
-		return false;
+		try {
+			if (conn != null) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
