@@ -2,12 +2,17 @@ package com.controller;
 
 import com.data.UserTable;
 import com.model.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
+
 public class UserController {
+    public ImageView closeWindow;
     @FXML
     private TextField userIdField; // User ID input field in the FXML
     @FXML
@@ -113,5 +118,10 @@ public class UserController {
      */
     public User getUser() {
         return this.user;
+    }
+
+    @FXML
+    public void UserSignup(ActionEvent mouseEvent) throws IOException {
+        CommonTask.pageNavigation("/DayTripsD5/Sample.fxml", Main.stage ,this.getClass(),"User Signup", 600, 400);
     }
 }
