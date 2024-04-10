@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.controller.TripController"
+      spacing="10" >
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <GridPane vgap="8" hgap="10">
+        <Label text="Trip ID:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="tripIdField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Location:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="locationField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Date (yyyy-mm-dd):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="dateField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Price:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    </GridPane>
+
+    <HBox spacing="10">
+        <Button text="Create Trip" onAction="#handleCreateTrip"/>
+        <Button text="Update Trip" onAction="#handleUpdateTrip"/>
+        <Button text="Delete Trip" onAction="#handleDeleteTrip"/>
+    </HBox>
+
+    <Text fx:id="feedbackText"/>
+</VBox>

@@ -47,7 +47,7 @@ public class UserController {
      * Called when the user presses the Log In button.
      */
     @FXML
-    private void logIn() {
+    private void logIn() throws IOException {
         String id = userIdField.getText();
         String password = passwordField.getText();
 
@@ -55,6 +55,9 @@ public class UserController {
             if (userTable.isValid(id, password)) {
                 this.user = userTable.findById(id);
                 actionTarget.setText("Login successful.");
+
+                // Navigate to User Booking View after successful login
+                CommonTask.pageNavigation("/DayTripsD5/UserBookingView.fxml", Main.stage, this.getClass(), "User Booking", 600, 400);
             } else {
                 actionTarget.setText("Login failed. Please try again.");
             }
@@ -121,7 +124,8 @@ public class UserController {
     }
 
     @FXML
-    public void UserSignup(ActionEvent mouseEvent) throws IOException {
+    public void UserSignUp(ActionEvent mouseEvent) throws IOException {
         CommonTask.pageNavigation("/DayTripsD5/Sample.fxml", Main.stage ,this.getClass(),"User Signup", 600, 400);
     }
+
 }

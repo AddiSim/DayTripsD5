@@ -4,12 +4,15 @@ import com.model.Trip;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TripTable{
 	private Connection conn;
 
 	public TripTable() throws Exception {
-		getCon();
+		this.conn = getCon();
 	}
 
 	public Connection getCon() throws Exception {
@@ -26,12 +29,12 @@ public class TripTable{
 		}
 	}
 
-	public void save(Trip trip) throws SQLException {
-		String query = "INSERT INTO Trips (TripID, Location, TripDate, Price) VALUES (?, ?, ?, ?)";
+	public void createTrip(Trip trip) throws SQLException {
+		String query = "INSERT INTO Trips (tripid, tripdate, location, price) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
 			ps.setString(1, trip.getTripID());
-			ps.setString(2, trip.getLocation());
-			ps.setDate(3, java.sql.Date.valueOf(trip.getTripDate()));
+			ps.setDate(2, java.sql.Date.valueOf(trip.getTripDate()));
+			ps.setString(3, trip.getLocation());
 			ps.setInt(4, trip.getPrice());
 			ps.executeUpdate();
 		}
@@ -43,7 +46,7 @@ public class TripTable{
 			ps.setString(1, tripID);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return new Trip(rs.getString("TripID"), rs.getString("Location"), rs.getDate("TripDate").toLocalDate(), rs.getInt("Price"));
+				return new Trip(rs.getString("TripID"), rs.getDate("TripDate").toLocalDate(), rs.getString("Location"), rs.getInt("Price"));
 			}
 		}
 		return null;
@@ -57,7 +60,7 @@ public class TripTable{
 		}
 	}
 
-	public void update(Trip trip) throws SQLException {
+	public void updateTrip(Trip trip) throws SQLException {
 		String query = "UPDATE Trips SET Location = ?, TripDate = ?, Price = ? WHERE TripID = ?";
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
 			ps.setString(1, trip.getLocation());
@@ -68,6 +71,18 @@ public class TripTable{
 		}
 	}
 
+	public List<Trip> searchTripsByLocation(String location) throws SQLException {
+		List<Trip> foundTrips = new ArrayList<>();
+		String sql = "SELECT * FROM Trips WHERE Location LIKE ?";
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, "%" + location + "%");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				foundTrips.add(new Trip(rs.getString("TripID"), rs.getDate("TripDate").toLocalDate(), rs.getString("Location"), rs.getInt("Price")));
+			}
+		}
+		return foundTrips;
+	}
 	public boolean isValid(Trip trip) throws SQLException {
 		String query = "SELECT COUNT(*) FROM Trips WHERE TripID = ? AND Location = ? AND TripDate = ? AND Price = ?";
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -95,5 +110,25 @@ public class TripTable{
 
 	public void close() {
 		disCon();
+	}
+
+	public List<Trip> getAllTrips() {
+		List<Trip> trips = new ArrayList<>();
+		String query = "SELECT * FROM Trips";
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String tripID = rs.getString("TripID");
+				LocalDate tripDate = rs.getDate("TripDate").toLocalDate();
+				String location = rs.getString("Location");
+				int price = rs.getInt("Price");
+				Trip trip = new Trip(tripID, tripDate, location, price);
+				trips.add(trip);
+			}
+			return trips;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

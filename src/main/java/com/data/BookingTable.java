@@ -1,9 +1,12 @@
 package com.data;
 
 import com.model.Booking;
+import com.model.Trip;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookingTable {
 	private Connection conn;
@@ -67,6 +70,37 @@ public class BookingTable {
 			ResultSet rs = statement.executeQuery();
 			rs.next();
 			return rs.getInt(1) > 0;
+		}
+	}
+
+	public List<Booking> findByTripId(String tripId) throws SQLException {
+		List<Booking> bookings = new ArrayList<>();
+		String sql = "SELECT * FROM Bookings WHERE TripID = ?";
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, tripId);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				bookings.add(new Booking(rs.getString("BookingID"), rs.getString("UserID"), rs.getString("TripID"), rs.getDate("TripDate").toLocalDate()));
+			}
+		}
+		return bookings;
+	}
+
+	public List<Trip> findByTripName(String tripName) throws SQLException {
+		String query = "SELECT * FROM Trips WHERE Location = ?";
+		try (PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setString(1, tripName);
+			ResultSet rs = ps.executeQuery();
+			List<Trip> trips = new ArrayList<>();
+			while (rs.next()) {
+				String tripID = rs.getString("TripID");
+				LocalDate tripDate = rs.getDate("TripDate").toLocalDate();
+				String location = rs.getString("Location");
+				int price = rs.getInt("Price");
+				Trip trip = new Trip(tripID, tripDate, location, price);
+				trips.add(trip);
+			}
+			return trips;
 		}
 	}
 

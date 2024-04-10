@@ -9,7 +9,7 @@ public class Trip {
     private ObjectProperty<LocalDate> tripDate = new SimpleObjectProperty<>(this, "tripDate");
     private SimpleIntegerProperty price = new SimpleIntegerProperty(this, "price");
 
-    public Trip(String tripID, String location, LocalDate tripDate, int price) {
+    public Trip(String tripID, LocalDate tripDate, String location, int price) {
         this.tripID.set(tripID);
         this.location.set(location);
         this.tripDate.set(tripDate);

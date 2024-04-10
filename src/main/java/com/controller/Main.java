@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.Objects;
+
 public class Main extends Application {
 
     public static Stage stage;
@@ -15,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         stage = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource("/DayTripsD5/Sample.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/DayTripsD5/Sample.fxml")));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setTitle("Day trip booker");
         primaryStage.setScene(new Scene(root, 600, 400));
