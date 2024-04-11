@@ -15,20 +15,51 @@ public class User {
         this.lastName.set(lastName);
     }
 
-    // Getters and Setters
-    public String getId() { return id.get(); }
-    public void setId(String id) { this.id.set(id); }
-    public SimpleStringProperty idProperty() { return id; }
+    public String getId() {
+        return id.get();
+    }
 
-    public String getPassword() { return password.get(); }
-    public void setPassword(String password) { this.password.set(password); }
-    public SimpleStringProperty passwordProperty() { return password; }
+    public void setId(String id) {
+        this.id.set(id);
+    }
 
-    public String getFirstName() { return firstName.get(); }
-    public void setFirstName(String firstName) { this.firstName.set(firstName); }
-    public SimpleStringProperty firstNameProperty() { return firstName; }
+    public SimpleStringProperty idProperty() {
+        return id;
+    }
 
-    public String getLastName() { return lastName.get(); }
-    public void setLastName(String lastName) { this.lastName.set(lastName); }
-    public SimpleStringProperty lastNameProperty() { return lastName; }
+    public String getPassword() {
+        return password.get();
+    }
+
+    public void setPassword(String password) {
+        this.password.set(password);
+    }
+
+    public SimpleStringProperty passwordProperty() {
+        return password;
+    }
+
+    public String getFirstName() {
+        return firstName.get();
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName.set(firstName);
+    }
+
+    public SimpleStringProperty firstNameProperty() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName.get();
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName.set(lastName);
+    }
+
+    public SimpleStringProperty lastNameProperty() {
+        return lastName;
+    }
 }

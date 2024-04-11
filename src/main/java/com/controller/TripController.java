@@ -14,6 +14,8 @@ public class TripController {
     @FXML
     private TextField tripIdField;
     @FXML
+    private TextField tripNameField;
+    @FXML
     private TextField locationField;
     @FXML
     private TextField dateField;
@@ -30,11 +32,12 @@ public class TripController {
     @FXML
     private void handleCreateTrip() {
         String tripID = tripIdField.getText();
+        String tripName = tripNameField.getText();
         String location = locationField.getText();
         LocalDate date = LocalDate.parse(dateField.getText());
         int price = Integer.parseInt(priceField.getText());
 
-        createTrip(tripID, location, date, price);
+        createTrip(tripID, date, tripName, location, price);
     }
 
     @FXML
@@ -46,16 +49,17 @@ public class TripController {
     @FXML
     private void handleUpdateTrip() {
         String tripID = tripIdField.getText();
-        String location = locationField.getText();
         LocalDate date = LocalDate.parse(dateField.getText());
+        String tripName = tripNameField.getText();
+        String location = locationField.getText();
         int price = Integer.parseInt(priceField.getText());
 
-        updateTrip(tripID, location, date, price);
+        updateTrip(tripID, date, tripName, location, price);
     }
 
-    private void createTrip(String tripID, String location, LocalDate date, int price) {
+    private void createTrip(String tripID, LocalDate date, String tripName, String location, int price) {
         try {
-            Trip trip = new Trip(tripID, date, location, price);
+            Trip trip = new Trip(tripID, date, tripName, location, price);
             tripTable.createTrip(trip);
             feedbackText.setText("Trip created successfully.");
         } catch (Exception e) {
@@ -83,9 +87,9 @@ public class TripController {
         }
     }
 
-    private void updateTrip(String tripID, String location, LocalDate date, int price) {
+    private void updateTrip(String tripID, LocalDate date, String tripName, String location, int price) {
         try {
-            Trip trip = new Trip(tripID, date, location, price);
+            Trip trip = new Trip(tripID, date, tripName, location, price);
             tripTable.updateTrip(trip);
             feedbackText.setText("Trip updated successfully.");
         } catch (Exception e) {

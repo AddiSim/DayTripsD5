@@ -17,8 +17,9 @@
     <TableView fx:id="tripTableView" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="idColumn" text="ID" prefWidth="75"/>
-            <TableColumn fx:id="locationColumn" text="Location" prefWidth="200"/>
             <TableColumn fx:id="dateColumn" text="Date" prefWidth="100"/>
+            <TableColumn fx:id="nameColumn" text="Name" prefWidth="200"/>
+            <TableColumn fx:id="locationColumn" text="Location" prefWidth="200"/>
             <TableColumn fx:id="priceColumn" text="Price" prefWidth="75"/>
         </columns>
     </TableView>

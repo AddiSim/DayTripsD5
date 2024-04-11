@@ -30,12 +30,13 @@ public class TripTable{
 	}
 
 	public void createTrip(Trip trip) throws SQLException {
-		String query = "INSERT INTO Trips (tripid, tripdate, location, price) VALUES (?, ?, ?, ?)";
+		String query = "INSERT INTO Trips (tripid, tripdate, tripname, location, price) VALUES (?, ?, ?, ?,?)";
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
 			ps.setString(1, trip.getTripID());
-			ps.setDate(2, java.sql.Date.valueOf(trip.getTripDate()));
-			ps.setString(3, trip.getLocation());
-			ps.setInt(4, trip.getPrice());
+			ps.setDate(2, Date.valueOf(trip.getTripDate()));
+			ps.setString(3, trip.getTripName());
+			ps.setString(4, trip.getLocation());
+			ps.setInt(5, trip.getPrice());
 			ps.executeUpdate();
 		}
 	}
@@ -46,7 +47,7 @@ public class TripTable{
 			ps.setString(1, tripID);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return new Trip(rs.getString("TripID"), rs.getDate("TripDate").toLocalDate(), rs.getString("Location"), rs.getInt("Price"));
+				return new Trip(rs.getString("TripID"), rs.getDate("TripDate").toLocalDate(), rs.getString("TripName"), rs.getString("Location"), rs.getInt("Price"));
 			}
 		}
 		return null;
@@ -78,7 +79,7 @@ public class TripTable{
 			statement.setString(1, "%" + location + "%");
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				foundTrips.add(new Trip(rs.getString("TripID"), rs.getDate("TripDate").toLocalDate(), rs.getString("Location"), rs.getInt("Price")));
+				foundTrips.add(new Trip(rs.getString("TripID"), rs.getDate("TripDate").toLocalDate(), rs.getString("TripName"), rs.getString("Location"), rs.getInt("Price")));
 			}
 		}
 		return foundTrips;
@@ -120,9 +121,10 @@ public class TripTable{
 			while (rs.next()) {
 				String tripID = rs.getString("TripID");
 				LocalDate tripDate = rs.getDate("TripDate").toLocalDate();
+				String tripName = rs.getString("TripName");
 				String location = rs.getString("Location");
 				int price = rs.getInt("Price");
-				Trip trip = new Trip(tripID, tripDate, location, price);
+				Trip trip = new Trip(tripID, tripDate, tripName, location, price);
 				trips.add(trip);
 			}
 			return trips;

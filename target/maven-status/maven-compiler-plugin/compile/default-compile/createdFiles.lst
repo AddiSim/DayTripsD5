@@ -3,14 +3,10 @@ com\model\Booking.class
 com\model\PayEuro.class
 com\model\Pay.class
 com\controller\CommonTask.class
-com\model\BookingInt.class
 com\controller\UserController.class
-com\data\UserTableInt.class
-com\model\TripInt.class
 com\controller\TripController.class
 com\data\DatabaseSetup.class
 com\controller\MainController.class
-com\model\UserInt.class
 com\controller\Main.class
 com\data\BookingTable.class
 com\data\TripTable.class

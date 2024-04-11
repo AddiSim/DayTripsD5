@@ -95,9 +95,10 @@ public class BookingTable {
 			while (rs.next()) {
 				String tripID = rs.getString("TripID");
 				LocalDate tripDate = rs.getDate("TripDate").toLocalDate();
+				String tripName1 = rs.getString("TripName");
 				String location = rs.getString("Location");
 				int price = rs.getInt("Price");
-				Trip trip = new Trip(tripID, tripDate, location, price);
+				Trip trip = new Trip(tripID, tripDate, tripName1, location, price);
 				trips.add(trip);
 			}
 			return trips;

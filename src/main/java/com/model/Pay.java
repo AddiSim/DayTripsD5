@@ -8,11 +8,10 @@ public abstract class Pay {
 
     public Pay() {
         conversionRate = new HashMap<>();
-        // Initialize conversion rates as needed
-        conversionRate.put("ISK", 1.0); // For simplicity, assuming 1:1 for ISK
-        conversionRate.put("EUR", 149.10); // Example conversion rate for EUR
-        conversionRate.put("GBP", 174.58); // Example conversion rate for GBP
-        conversionRate.put("USD", 137.42); // Example conversion rate for USD
+        conversionRate.put("ISK", 1.0);
+        conversionRate.put("EUR", 149.10);
+        conversionRate.put("GBP", 174.58);
+        conversionRate.put("USD", 137.42);
     }
 
     public long getISK(Double value, String currency) {

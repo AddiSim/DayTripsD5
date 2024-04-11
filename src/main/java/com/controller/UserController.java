@@ -14,27 +14,18 @@ import java.io.IOException;
 public class UserController {
     public ImageView closeWindow;
     @FXML
-    private TextField userIdField; // User ID input field in the FXML
+    private TextField userIdField;
     @FXML
-    private PasswordField passwordField; // Password input field in the FXML
+    private PasswordField passwordField;
     @FXML
-    private Text actionTarget; // Text element for displaying feedback messages
+    private Text actionTarget;
 
-    private UserTable userTable; // For database operations
-    private User user; // The currently logged-in user
+    private UserTable userTable;
+    private User user;
+
+    private static String loggedInUserId;
 
     public UserController() {
-        // It's usually not possible to handle exceptions like this in the constructor because of FXML loading,
-        // but let's ensure UserTable is initialized properly elsewhere (e.g., in an initialize method)
-    }
-
-    /**
-     * Initializes the controller class. This method is automatically called
-     * after the FXML file has been loaded.
-     */
-    @FXML
-    private void initialize() {
-        // Initialization logic here
         try {
             userTable = new UserTable();
         } catch (Exception e) {
@@ -43,9 +34,16 @@ public class UserController {
         }
     }
 
-    /**
-     * Called when the user presses the Log In button.
-     */
+    @FXML
+    private void initialize() {
+        try {
+            userTable = new UserTable();
+        } catch (Exception e) {
+            e.printStackTrace();
+            actionTarget.setText("Failed to initialize database connection.");
+        }
+    }
+
     @FXML
     private void logIn() throws IOException {
         String id = userIdField.getText();
@@ -54,9 +52,9 @@ public class UserController {
         try {
             if (userTable.isValid(id, password)) {
                 this.user = userTable.findById(id);
+                loggedInUserId = id;
                 actionTarget.setText("Login successful.");
 
-                // Navigate to User Booking View after successful login
                 CommonTask.pageNavigation("/DayTripsD5/UserBookingView.fxml", Main.stage, this.getClass(), "User Booking", 600, 400);
             } else {
                 actionTarget.setText("Login failed. Please try again.");
@@ -67,19 +65,11 @@ public class UserController {
         }
     }
 
-    /**
-     * Logs out the currently logged-in user.
-     */
     public void logOut() {
         this.user = null;
         actionTarget.setText("You have been logged out.");
-        // Optional: Return to the login screen or clear sensitive UI elements.
     }
 
-    /**
-     * Creates a new user account with the provided details.
-     * This could be called from a registration form in your application.
-     */
     public boolean createUser(String id, String password, String firstName, String lastName) {
         try {
             if (userTable.findById(id) == null) {
@@ -115,12 +105,12 @@ public class UserController {
         }
     }
 
-    /**
-     * Getter for the currently logged-in user.
-     * This could be used to display user information in the UI.
-     */
     public User getUser() {
         return this.user;
+    }
+
+    public static String getLoggedInUserId() {
+        return loggedInUserId;
     }
 
     @FXML
