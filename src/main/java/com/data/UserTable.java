@@ -25,13 +25,13 @@ public class UserTable {
 		}
 	}
 
-	public void save(String id, String password, String firstName, String lastName) throws SQLException {
+	public void save(User user) throws SQLException {
 		String query = "INSERT INTO Users (ID, Password, FirstName, LastName) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
-			ps.setString(1, id);
-			ps.setString(2, password);
-			ps.setString(3, firstName);
-			ps.setString(4, lastName);
+			ps.setString(1, user.getId());
+			ps.setString(2, user.getPassword());
+			ps.setString(3, user.getFirstName());
+			ps.setString(4, user.getLastName());
 			ps.executeUpdate();
 		}
 	}

@@ -70,10 +70,10 @@ public class UserController {
         actionTarget.setText("You have been logged out.");
     }
 
-    public boolean createUser(String id, String password, String firstName, String lastName) {
+    public boolean createUser(User user) {
         try {
-            if (userTable.findById(id) == null) {
-                userTable.save(id, password, firstName, lastName);
+            if (userTable.findById(user.getId()) == null) {
+                userTable.save(user);
                 actionTarget.setText("User created successfully.");
                 return true;
             } else {

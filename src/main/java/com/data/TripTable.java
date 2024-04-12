@@ -72,6 +72,18 @@ public class TripTable{
 		}
 	}
 
+	public List<Trip> searchTripsByName(String name) throws SQLException {
+		List<Trip> foundTrips = new ArrayList<>();
+		String sql = "SELECT * FROM Trips WHERE TripName LIKE ?";
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, "%" + name + "%");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				foundTrips.add(new Trip(rs.getString("TripID"), rs.getDate("TripDate").toLocalDate(), rs.getString("TripName"), rs.getString("Location"), rs.getInt("Price")));
+			}
+		}
+		return foundTrips;
+	}
 	public List<Trip> searchTripsByLocation(String location) throws SQLException {
 		List<Trip> foundTrips = new ArrayList<>();
 		String sql = "SELECT * FROM Trips WHERE Location LIKE ?";
