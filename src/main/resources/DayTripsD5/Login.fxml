@@ -26,10 +26,5 @@
         <Button text="Sign Up" onAction="#UserSignUp"/>
     </HBox>
     <Text fx:id="actionTarget" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2"/>
-    <ImageView fx:id="closeWindow" fitHeight="15.0" fitWidth="15.0" layoutX="566.0" layoutY="12.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" styleClass="closeWindow">
-        <image>
-            <Image url="@exitIcon1.png" />
-        </image>
-    </ImageView>
 </GridPane>
 

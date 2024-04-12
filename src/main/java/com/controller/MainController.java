@@ -10,9 +10,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class MainController  {
 
-    public ImageView closeWindow;
     public Button customerLoginBtn;
     public Button managerLoginBtn;
 
@@ -21,16 +20,6 @@ public class MainController implements Initializable {
     }
     public void Customer_Login(ActionEvent event) throws IOException {
         CommonTask.pageNavigation("/DayTripsD5/login.fxml",Main.stage,this.getClass(),"Customer Login", 600, 400);
-    }
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-        closeWindow.setOnMouseClicked(event -> {
-            System.exit(0);
-        });
-
     }
 
 

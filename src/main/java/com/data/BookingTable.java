@@ -52,6 +52,31 @@ public class BookingTable {
 		return null;
 	}
 
+	public List<Booking> findByUserId(String userID) throws SQLException {
+		List<Booking> bookings = new ArrayList<>();
+		String sql = "SELECT * FROM Bookings WHERE UserID = ?";
+		try (PreparedStatement statement = conn.prepareStatement(sql)) {
+			statement.setString(1, userID);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				bookings.add(new Booking(rs.getString("BookingID"), rs.getString("UserID"), rs.getString("TripID"), rs.getDate("TripDate").toLocalDate()));
+			}
+		}
+		return bookings;
+	}
+
+	public List<Booking> findAll() throws SQLException {
+		List<Booking> bookings = new ArrayList<>();
+		String sql = "SELECT * FROM Bookings";
+		try (Statement statement = conn.createStatement()) {
+			ResultSet rs = statement.executeQuery(sql);
+			while (rs.next()) {
+				bookings.add(new Booking(rs.getString("BookingID"), rs.getString("UserID"), rs.getString("TripID"), rs.getDate("TripDate").toLocalDate()));
+			}
+		}
+		return bookings;
+	}
+
 	public void deleteBooking(String bookingID) throws SQLException {
 		String sql = "DELETE FROM Bookings WHERE BookingID = ?";
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {

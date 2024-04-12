@@ -24,7 +24,6 @@
         </columns>
     </TableView>
 
-    <!-- Booking Section -->
     <HBox spacing="10" alignment="CENTER">
         <Button text="Book Selected Trip" onAction="#handleBookTrip"/>
     </HBox>

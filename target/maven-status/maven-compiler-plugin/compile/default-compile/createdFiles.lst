@@ -3,6 +3,7 @@ com\model\Booking.class
 com\model\PayEuro.class
 com\model\Pay.class
 com\controller\CommonTask.class
+com\service\TripBookingService.class
 com\controller\UserController.class
 com\controller\TripController.class
 com\data\DatabaseSetup.class
@@ -11,6 +12,7 @@ com\controller\Main.class
 com\data\BookingTable.class
 com\data\TripTable.class
 com\controller\SignUp.class
+com\api\TripBookingController.class
 com\model\User.class
 com\controller\BookingController.class
 com\data\UserTable.class
