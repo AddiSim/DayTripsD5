@@ -1,4 +1,21 @@
-FROM openjdk:11
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+# Start with a base image containing Java runtime
+FROM maven:3.8.1-openjdk-11-slim AS build
+
+# Make the project folder the current directory
+WORKDIR /app
+
+# Copy pom.xml and src directory to the current directory
+COPY pom.xml .
+COPY src ./src
+
+# Package the application
+RUN mvn package
+
+# Start with a base image containing Java runtime
+FROM openjdk:11-jre-slim
+
+# Make the application's jar accessible
+COPY --from=build /app/target/*.jar app.jar
+
+# Run the application
 ENTRYPOINT ["java","-jar","/app.jar"]
