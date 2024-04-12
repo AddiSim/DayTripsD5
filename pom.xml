@@ -132,7 +132,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>com.controller.Mainforapi</mainClass>
+              <mainClass>com.controller.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
