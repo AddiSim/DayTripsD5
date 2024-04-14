@@ -26,23 +26,28 @@ public class UserTable {
 	}
 
 	public void save(User user) throws SQLException {
-		String query = "INSERT INTO Users (ID, Password, FirstName, LastName) VALUES (?, ?, ?, ?)";
-		try (PreparedStatement ps = conn.prepareStatement(query)) {
-			ps.setString(1, user.getId());
-			ps.setString(2, user.getPassword());
-			ps.setString(3, user.getFirstName());
-			ps.setString(4, user.getLastName());
+		String query = "INSERT INTO Users (Password, FirstName, LastName) VALUES (?, ?, ?)";
+		try (PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+			ps.setString(1, user.getPassword());
+			ps.setString(2, user.getFirstName());
+			ps.setString(3, user.getLastName());
 			ps.executeUpdate();
+
+			try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					user.setId(generatedKeys.getInt(1));
+				}
+			}
 		}
 	}
 
-	public User findById(String id) throws SQLException {
+	public User findById(Number id) throws SQLException {
 		String query = "SELECT * FROM Users WHERE ID = ?";
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
-			ps.setString(1, id);
+			ps.setString(1, id.toString());
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return new User(rs.getString("ID"), rs.getString("Password"), rs.getString("FirstName"), rs.getString("LastName"));
+				return new User(rs.getString("Password"), rs.getString("FirstName"), rs.getString("LastName"));
 			}
 		}
 		return null;
@@ -56,10 +61,10 @@ public class UserTable {
 		}
 	}
 
-	public boolean isValid(String id, String password) throws SQLException {
+	public boolean isValid(Number id, String password) throws SQLException {
 		String query = "SELECT COUNT(*) FROM Users WHERE ID = ? AND Password = ?";
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
-			ps.setString(1, id);
+			ps.setString(1, id.toString());
 			ps.setString(2, password);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {

@@ -18,24 +18,27 @@ public class TestTripBooking {
 
             TripBooking tripBooking = new TripBooking("Trip Booking", 100.0, "Book your trips here!");
 
-            // Test searchByName method
+            assert tripBooking.getServiceName().equals("Trip Booking");
+            assert tripBooking.getServicePrice().equals(100.0);
+            assert tripBooking.getServiceDescription().equals("Book your trips here!");
+
             Trip[] tripsByName = tripBooking.searchByName("Trip Name");
             for (Trip trip : tripsByName) {
+                assert trip.getTripName().equals("Trip Name");
                 System.out.println(trip.getTripName());
             }
 
-
             Trip[] tripsByLocation = tripBooking.searchByLocation("Location");
             for (Trip trip : tripsByLocation) {
+                assert trip.getLocation().equals("Location");
                 System.out.println(trip.getLocation());
             }
 
-
-            User user = new User("2", "password", "Arnar", "Simonsen");
+            User user = new User("password", "Arnar", "Simonsen");
 
             userTable.save(user);
 
-            Trip trip = new Trip("3", LocalDate.parse("2024-04-04"), "Trip1", "reykjavik", 599);
+            Trip trip = new Trip(LocalDate.parse("2024-04-04"), "Trip1", "reykjavik", 599);
 
             tripTable.createTrip(trip);
 

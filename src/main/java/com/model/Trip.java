@@ -4,29 +4,28 @@ import javafx.beans.property.*;
 import java.time.LocalDate;
 
 public class Trip {
-    private SimpleStringProperty tripID = new SimpleStringProperty(this, "tripID");
+    private SimpleIntegerProperty tripID = new SimpleIntegerProperty(this, "tripID");
     private SimpleStringProperty location = new SimpleStringProperty(this, "location");
     private SimpleStringProperty tripName = new SimpleStringProperty(this, "tripName");
     private ObjectProperty<LocalDate> tripDate = new SimpleObjectProperty<>(this, "tripDate");
     private SimpleIntegerProperty price = new SimpleIntegerProperty(this, "price");
 
-    public Trip(String tripID, LocalDate tripDate, String tripName, String location, int price) {
-        this.tripID.set(tripID);
+    public Trip(LocalDate tripDate, String tripName, String location, int price) {
         this.location.set(location);
         this.tripDate.set(tripDate);
         this.tripName.set(tripName);
         this.price.set(price);
     }
 
-    public String getTripID() {
+    public int getTripID() {
         return tripID.get();
     }
 
-    public void setTripID(String tripID) {
+    public void setTripID(Integer tripID) {
         this.tripID.set(tripID);
     }
 
-    public SimpleStringProperty tripIDProperty() {
+    public SimpleIntegerProperty tripIDProperty() {
         return tripID;
     }
 

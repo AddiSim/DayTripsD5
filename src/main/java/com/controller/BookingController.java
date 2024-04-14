@@ -26,7 +26,7 @@ public class BookingController {
     @FXML
     private TableView<Trip> tripTableView;
     @FXML
-    private javafx.scene.control.TableColumn<Trip, String> idColumn;
+    private javafx.scene.control.TableColumn<Trip, Integer> idColumn;
     @FXML
     private javafx.scene.control.TableColumn<Trip, String> nameColumn;
     @FXML
@@ -54,7 +54,7 @@ public class BookingController {
     @FXML
     private void initialize() {
         try {
-            idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTripID()));
+            idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getTripID()).asObject());
             nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTripName()));
             locationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLocation()));
             dateColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getTripDate()));
@@ -94,8 +94,8 @@ public class BookingController {
                 feedbackText.setText("Please select a trip to book.");
                 return;
             }
-            String userId = userController.getLoggedInUserId();
-            String tripId = selectedTrip.getTripID();
+            int userId = UserController.getLoggedInUserId();
+            int tripId = selectedTrip.getTripID();
             LocalDate tripDate = LocalDate.now();
             String bookingId = "BOOKING" + System.currentTimeMillis();
             Booking booking = new Booking(bookingId, userId, tripId, tripDate);

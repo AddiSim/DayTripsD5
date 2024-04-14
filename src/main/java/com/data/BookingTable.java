@@ -33,8 +33,8 @@ public class BookingTable {
 		String sql = "INSERT INTO Bookings (BookingID, UserID, TripID, TripDate) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
 			statement.setString(1, b.getBookingID());
-			statement.setString(2, b.getUserID());
-			statement.setString(3, b.getTripID());
+			statement.setInt(2, b.getUserID());
+			statement.setInt(3, b.getTripID());
 			statement.setDate(4, Date.valueOf(b.getTripDate()));
 			statement.executeUpdate();
 		}
@@ -46,7 +46,7 @@ public class BookingTable {
 			statement.setString(1, bookingID);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
-				return new Booking(rs.getString("BookingID"), rs.getString("UserID"), rs.getString("TripID"), rs.getDate("TripDate").toLocalDate());
+				return new Booking(rs.getString("BookingID"), rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate());
 			}
 		}
 		return null;
@@ -59,7 +59,7 @@ public class BookingTable {
 			statement.setString(1, userID);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				bookings.add(new Booking(rs.getString("BookingID"), rs.getString("UserID"), rs.getString("TripID"), rs.getDate("TripDate").toLocalDate()));
+				bookings.add(new Booking(rs.getString("BookingID"), rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
 			}
 		}
 		return bookings;
@@ -71,7 +71,7 @@ public class BookingTable {
 		try (Statement statement = conn.createStatement()) {
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {
-				bookings.add(new Booking(rs.getString("BookingID"), rs.getString("UserID"), rs.getString("TripID"), rs.getDate("TripDate").toLocalDate()));
+				bookings.add(new Booking(rs.getString("BookingID"), rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
 			}
 		}
 		return bookings;
@@ -105,7 +105,7 @@ public class BookingTable {
 			statement.setString(1, tripId);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				bookings.add(new Booking(rs.getString("BookingID"), rs.getString("UserID"), rs.getString("TripID"), rs.getDate("TripDate").toLocalDate()));
+				bookings.add(new Booking(rs.getString("BookingID"), rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
 			}
 		}
 		return bookings;
@@ -118,12 +118,12 @@ public class BookingTable {
 			ResultSet rs = ps.executeQuery();
 			List<Trip> trips = new ArrayList<>();
 			while (rs.next()) {
-				String tripID = rs.getString("TripID");
+				Integer tripID = rs.getInt("TripID");
 				LocalDate tripDate = rs.getDate("TripDate").toLocalDate();
 				String tripName1 = rs.getString("TripName");
 				String location = rs.getString("Location");
 				int price = rs.getInt("Price");
-				Trip trip = new Trip(tripID, tripDate, tripName1, location, price);
+				Trip trip = new Trip(tripDate, tripName1, location, price);
 				trips.add(trip);
 			}
 			return trips;

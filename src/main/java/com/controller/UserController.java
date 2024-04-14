@@ -23,7 +23,7 @@ public class UserController {
     private UserTable userTable;
     private User user;
 
-    private static String loggedInUserId;
+    private static Integer loggedInUserId;
 
     public UserController() {
         try {
@@ -46,7 +46,7 @@ public class UserController {
 
     @FXML
     private void logIn() throws IOException {
-        String id = userIdField.getText();
+        int id = Integer.parseInt(userIdField.getText());
         String password = passwordField.getText();
 
         try {
@@ -87,10 +87,10 @@ public class UserController {
         }
     }
 
-    public boolean delUser(String id, String password) {
+    public boolean delUser(Number id, String password) {
         try {
             if (user != null && userTable.isValid(id, password)) {
-                userTable.deleteUser(id);
+                userTable.deleteUser(id.toString());
                 this.user = null;
                 actionTarget.setText("User successfully deleted.");
                 return true;
@@ -109,7 +109,7 @@ public class UserController {
         return this.user;
     }
 
-    public static String getLoggedInUserId() {
+    public static Integer getLoggedInUserId() {
         return loggedInUserId;
     }
 
