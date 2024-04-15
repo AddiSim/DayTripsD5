@@ -7,6 +7,7 @@ import com.model.User;
 import com.model.Booking;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class TestTripBooking {
     private static UserTable userTable;
@@ -22,29 +23,45 @@ public class TestTripBooking {
             assert tripBooking.getServicePrice().equals(100.0);
             assert tripBooking.getServiceDescription().equals("Book your trips here!");
 
-            Trip[] tripsByName = tripBooking.searchByName("Trip Name");
-            for (Trip trip : tripsByName) {
-                assert trip.getTripName().equals("Trip Name");
-                System.out.println(trip.getTripName());
+            String[] locations = {"London", "New York", "Reykjavík", "Akureyri"};
+            for (String location : locations) {
+                for (int i = 1; i <= 10; i++) {
+                    Trip trip = new Trip(LocalDate.now(), location + " Trip " + i, location, 100 * i);
+                    tripTable.createTrip(trip);
+                }
             }
 
-            Trip[] tripsByLocation = tripBooking.searchByLocation("Location");
-            for (Trip trip : tripsByLocation) {
-                assert trip.getLocation().equals("Location");
-                System.out.println(trip.getLocation());
+            for (String location : locations) {
+                for (int i = 1; i <= 10; i++) {
+                    Trip[] trips = tripBooking.searchByName(location + " Trip " + i);
+                    assert trips.length == 1;
+                    assert trips[0].getTripName().equals(location + " Trip " + i);
+                }
+            }
+
+            for (String location : locations) {
+                Trip[] tripsByLocation = tripBooking.searchByLocation(location);
+                assert tripsByLocation.length == 10;
+                for (Trip trip : tripsByLocation) {
+                    assert trip.getLocation().equals(location);
+                }
             }
 
             User user = new User("password", "Arnar", "Simonsen");
-
             userTable.save(user);
 
-            Trip trip = new Trip(LocalDate.parse("2024-04-04"), "Trip1", "reykjavik", 599);
-
-            tripTable.createTrip(trip);
-
-            LocalDate date = LocalDate.now();
-            Booking booking = tripBooking.createBooking(trip, user, date);
-            System.out.println(booking.getBookingID());
+            for (String location : locations) {
+                for (int i = 1; i <= 10; i++) {
+                    List<Trip> trips = tripTable.searchTripsByName(location + " Trip " + i);
+                    if (!trips.isEmpty()) {
+                        Trip trip = trips.get(0);
+                        // Save the trip to the database before creating a booking
+                        tripTable.createTrip(trip);
+                        Booking booking = tripBooking.createBooking(trip, user, LocalDate.now());
+                        assert booking != null;
+                    }
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

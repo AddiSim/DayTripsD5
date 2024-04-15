@@ -2,7 +2,6 @@ com\model\Booking.class
 com\controller\Main.class
 com\data\BookingTable.class
 com\data\TripTable.class
-com\controller\SignUp.class
 com\service\Service.class
 com\service\TestTripBooking.class
 com\controller\CommonTask.class

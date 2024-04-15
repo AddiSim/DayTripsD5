@@ -20,6 +20,4 @@ public class MainController  {
         CommonTask.pageNavigation("/DayTripsD5/login.fxml",Main.stage,this.getClass(),"Customer Login", 600, 400);
     }
 
-
-
 }
