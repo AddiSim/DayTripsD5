@@ -1,4 +1,4 @@
-package com.model;
+package DayTrips.model;
 
 public class User {
     private int id;

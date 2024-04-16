@@ -1,10 +1,10 @@
-package com.service;
+package DayTrips.service;
 
-import com.data.TripTable;
-import com.data.UserTable;
-import com.model.Trip;
-import com.model.User;
-import com.model.Booking;
+import DayTrips.data.TripTable;
+import DayTrips.data.UserTable;
+import DayTrips.model.Booking;
+import DayTrips.model.Trip;
+import DayTrips.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -55,12 +55,19 @@ public class TestTripBooking {
                     List<Trip> trips = tripTable.searchTripsByName(location + " Trip " + i);
                     if (!trips.isEmpty()) {
                         Trip trip = trips.get(0);
-                        // Save the trip to the database before creating a booking
                         tripTable.createTrip(trip);
                         Booking booking = tripBooking.createBooking(trip, user, LocalDate.now());
                         assert booking != null;
                     }
                 }
+            }
+
+            Trip foundTrip = tripTable.findById(String.valueOf(1));
+            if (foundTrip != null) {
+                System.out.println(foundTrip.getTripID());
+                assert foundTrip.getTripID() == 1;
+            } else {
+                System.out.println("No trip found with the specified ID.");
             }
 
         } catch (Exception e) {

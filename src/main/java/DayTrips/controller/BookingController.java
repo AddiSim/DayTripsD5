@@ -1,9 +1,9 @@
-package com.controller;
+package DayTrips.controller;
 
-import com.data.BookingTable;
-import com.data.TripTable;
-import com.model.Booking;
-import com.model.Trip;
+import DayTrips.data.BookingTable;
+import DayTrips.data.TripTable;
+import DayTrips.model.Booking;
+import DayTrips.model.Trip;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,8 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -87,7 +85,7 @@ public class BookingController {
     }
 
     @FXML
-    protected void handleBookTrip(ActionEvent actionEvent) {
+    protected void createBooking(ActionEvent actionEvent) {
         try {
             Trip selectedTrip = tripTableView.getSelectionModel().getSelectedItem();
             if (selectedTrip == null) {
@@ -97,9 +95,8 @@ public class BookingController {
             int userId = UserController.getLoggedInUserId();
             int tripId = selectedTrip.getTripID();
             LocalDate tripDate = LocalDate.now();
-            String bookingId = "BOOKING" + System.currentTimeMillis();
-            Booking booking = new Booking(bookingId, userId, tripId, tripDate);
-            bookingTable.save(booking);
+            Booking booking = new Booking(userId, tripId, tripDate);
+            bookingTable.createBooking(booking);
 
             feedbackText.setText("Booking successful for Trip ID: " + tripId);
         } catch (Exception e) {

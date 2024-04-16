@@ -1,7 +1,7 @@
-package com.controller;
+package DayTrips.controller;
 
-import com.data.UserTable;
-import com.model.User;
+import DayTrips.data.UserTable;
+import DayTrips.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;

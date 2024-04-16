@@ -1,4 +1,4 @@
-package com.controller;
+package DayTrips.controller;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;

@@ -1,7 +1,6 @@
-package com.data;
+package DayTrips.data;
 
-import com.model.User;
-import io.github.cdimascio.dotenv.Dotenv;
+import DayTrips.model.User;
 import java.sql.*;
 
 public class UserTable {
@@ -11,14 +10,10 @@ public class UserTable {
 		this.conn = getCon();
 	}
 
-	private Connection getCon() throws Exception {
-		Dotenv dotenv = Dotenv.load();
-		String dbUrl = dotenv.get("DB_URL");
-		String user = dotenv.get("DB_USER");
-		String password = dotenv.get("DB_PASSWORD");
+	public Connection getCon() throws Exception {
 		try {
-			Class.forName("org.postgresql.Driver");
-			return DriverManager.getConnection(dbUrl, user, password);
+			Class.forName("org.sqlite.JDBC");
+			return DriverManager.getConnection("jdbc:sqlite:database.db");
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 			return null;

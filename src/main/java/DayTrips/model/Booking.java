@@ -1,17 +1,15 @@
-package com.model;
+package DayTrips.model;
 
 import javafx.beans.property.*;
 
 import java.time.LocalDate;
 
 public class Booking {
-    private SimpleStringProperty bookingID;
     private IntegerProperty userID;
     private IntegerProperty tripID;
     private SimpleObjectProperty<LocalDate> tripDate;
 
-    public Booking(String bookingID, int userID, int tripID, LocalDate tripDate) {
-        this.bookingID = new SimpleStringProperty(bookingID);
+    public Booking(int userID, int tripID, LocalDate tripDate) {
         this.userID = new SimpleIntegerProperty(userID);
         this.tripID = new SimpleIntegerProperty(tripID);
         this.tripDate = new SimpleObjectProperty<>(tripDate);
@@ -27,18 +25,6 @@ public class Booking {
 
     public IntegerProperty userIDProperty() {
         return userID;
-    }
-
-    public String getBookingID() {
-        return bookingID.get();
-    }
-
-    public void setBookingID(String bookingID) {
-        this.bookingID.set(bookingID);
-    }
-
-    public SimpleStringProperty bookingIDProperty() {
-        return bookingID;
     }
 
     public int getTripID() {
