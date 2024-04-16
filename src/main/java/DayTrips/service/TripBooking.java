@@ -1,10 +1,10 @@
-package com.service;
+package DayTrips.service;
 
-import com.data.BookingTable;
-import com.data.TripTable;
-import com.model.Booking;
-import com.model.Trip;
-import com.model.User;
+import DayTrips.data.BookingTable;
+import DayTrips.data.TripTable;
+import DayTrips.model.Booking;
+import DayTrips.model.Trip;
+import DayTrips.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,8 +36,8 @@ public class TripBooking implements Service {
 
     public Booking createBooking(Trip trip, User user, LocalDate Date) throws Exception {
         String bookingId = "BOOKING" + System.currentTimeMillis();
-        Booking booking = new Booking(bookingId, user.getId(), trip.getTripID(), Date);
-        bookingTable.save(booking);
+        Booking booking = new Booking(user.getId(), trip.getTripID(), Date);
+        bookingTable.createBooking(booking);
         return booking;
     }
 

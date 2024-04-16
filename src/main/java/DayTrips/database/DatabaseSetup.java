@@ -1,4 +1,4 @@
-package com.data;
+package DayTrips.database;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,21 +7,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import io.github.cdimascio.dotenv.Dotenv;
 
 public class DatabaseSetup {
 
     private static Connection connectToDatabase() {
-        Dotenv dotenv = Dotenv.load();
-        String dbUrl = dotenv.get("DB_URL");
-        String user = dotenv.get("DB_USER");
-        String password = dotenv.get("DB_PASSWORD");
-        System.out.println("DB_URL: " + dbUrl);
-        System.out.println("DB_USER: " + user);
-        System.out.println("DB_PASSWORD: " + password);
         try {
-            Class.forName("org.postgresql.Driver");
-            return DriverManager.getConnection(dbUrl, user, password);
+            Class.forName("org.sqlite.JDBC");
+            return DriverManager.getConnection("jdbc:sqlite:database.db");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             return null;
@@ -45,7 +37,7 @@ public class DatabaseSetup {
         try {
             Connection conn = connectToDatabase();
             if (conn != null) {
-                executeSqlScript(conn, "src/main/java/com/data/database.sql");
+                executeSqlScript(conn, "src/main/java/com/database/database.sql");
                 System.out.println("Database setup completed successfully.");
                 conn.close();
             } else {

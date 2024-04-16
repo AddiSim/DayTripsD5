@@ -1,4 +1,4 @@
-package com.model;
+package DayTrips.model;
 
 import javafx.beans.property.*;
 import java.time.LocalDate;
@@ -21,7 +21,7 @@ public class Trip {
         return tripID.get();
     }
 
-    public void setTripID(Integer tripID) {
+    public void setTripID(int tripID) {
         this.tripID.set(tripID);
     }
 
@@ -68,4 +68,6 @@ public class Trip {
     public String getTripName() {
         return this.tripName.get();
     }
+
+
 }

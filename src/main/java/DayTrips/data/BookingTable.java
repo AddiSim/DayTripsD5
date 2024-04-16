@@ -1,10 +1,11 @@
-package com.data;
+package DayTrips.data;
 
-import com.model.Booking;
-import com.model.Trip;
-import io.github.cdimascio.dotenv.Dotenv;
+import DayTrips.model.Booking;
+import DayTrips.model.Trip;
 import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,27 +16,22 @@ public class BookingTable {
 		this.conn = getCon();
 	}
 
-	private Connection getCon() throws Exception {
-		Dotenv dotenv = Dotenv.load();
-		String dbUrl = dotenv.get("DB_URL");
-		String user = dotenv.get("DB_USER");
-		String password = dotenv.get("DB_PASSWORD");
+	public Connection getCon() throws Exception {
 		try {
-			Class.forName("org.postgresql.Driver");
-			return DriverManager.getConnection(dbUrl, user, password);
+			Class.forName("org.sqlite.JDBC");
+			return DriverManager.getConnection("jdbc:sqlite:database.db");
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public void save(Booking b) throws SQLException {
-		String sql = "INSERT INTO Bookings (BookingID, UserID, TripID, TripDate) VALUES (?, ?, ?, ?)";
+	public void createBooking(Booking b) throws SQLException {
+		String sql = "INSERT INTO Bookings (UserID, TripID, TripDate) VALUES (?, ?, ?)";
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
-			statement.setString(1, b.getBookingID());
-			statement.setInt(2, b.getUserID());
-			statement.setInt(3, b.getTripID());
-			statement.setDate(4, Date.valueOf(b.getTripDate()));
+			statement.setInt(1, b.getUserID());
+			statement.setInt(2, b.getTripID());
+			statement.setString(3, b.getTripDate().toString());
 			statement.executeUpdate();
 		}
 	}
@@ -46,7 +42,11 @@ public class BookingTable {
 			statement.setString(1, bookingID);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
-				return new Booking(rs.getString("BookingID"), rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate());
+				long timestamp = rs.getLong("TripDate");
+				LocalDate tripDate = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
+				int userId = rs.getInt("UserID");
+				int tripId = rs.getInt("TripID");
+				return new Booking(userId, tripId, tripDate);
 			}
 		}
 		return null;
@@ -59,7 +59,7 @@ public class BookingTable {
 			statement.setString(1, userID);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				bookings.add(new Booking(rs.getString("BookingID"), rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
+				bookings.add(new Booking(rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
 			}
 		}
 		return bookings;
@@ -71,7 +71,7 @@ public class BookingTable {
 		try (Statement statement = conn.createStatement()) {
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {
-				bookings.add(new Booking(rs.getString("BookingID"), rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
+				bookings.add(new Booking(rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
 			}
 		}
 		return bookings;
@@ -85,13 +85,12 @@ public class BookingTable {
 		}
 	}
 
-	public boolean isValid(String bookingID, String userID, String tripID, LocalDate tripDate) throws SQLException {
-		String sql = "SELECT COUNT(*) FROM Bookings WHERE BookingID = ? AND UserID = ? AND TripID = ? AND TripDate = ?";
+	public boolean isValid(String userID, String tripID, LocalDate tripDate) throws SQLException {
+		String sql = "SELECT COUNT(*) FROM Bookings WHERE UserID = ? AND TripID = ? AND TripDate = ?";
 		try (PreparedStatement statement = conn.prepareStatement(sql)) {
-			statement.setString(1, bookingID);
-			statement.setString(2, userID);
-			statement.setString(3, tripID);
-			statement.setDate(4, Date.valueOf(tripDate));
+			statement.setString(1, userID);
+			statement.setString(2, tripID);
+			statement.setDate(3, Date.valueOf(tripDate));
 			ResultSet rs = statement.executeQuery();
 			rs.next();
 			return rs.getInt(1) > 0;
@@ -105,7 +104,7 @@ public class BookingTable {
 			statement.setString(1, tripId);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				bookings.add(new Booking(rs.getString("BookingID"), rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
+				bookings.add(new Booking(rs.getInt("UserID"), rs.getInt("TripID"), rs.getDate("TripDate").toLocalDate()));
 			}
 		}
 		return bookings;

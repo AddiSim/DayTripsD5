@@ -1,4 +1,4 @@
-package com.controller;
+package DayTrips.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

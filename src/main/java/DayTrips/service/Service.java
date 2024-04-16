@@ -1,4 +1,4 @@
-package com.service;
+package DayTrips.service;
 
 public interface Service {
     String getServiceName();

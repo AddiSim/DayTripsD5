@@ -1,7 +1,6 @@
-package com.data;
+package DayTrips.data;
 
-import com.model.Trip;
-import io.github.cdimascio.dotenv.Dotenv;
+import DayTrips.model.Trip;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -16,34 +15,33 @@ public class TripTable{
 	}
 
 	public Connection getCon() throws Exception {
-		Dotenv dotenv = Dotenv.load();
-		String dbUrl = dotenv.get("DB_URL");
-		String user = dotenv.get("DB_USER");
-		String password = dotenv.get("DB_PASSWORD");
 		try {
-			Class.forName("org.postgresql.Driver");
-			return DriverManager.getConnection(dbUrl, user, password);
+			Class.forName("org.sqlite.JDBC");
+			return DriverManager.getConnection("jdbc:sqlite:database.db");
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public void createTrip(Trip trip) throws SQLException {
-		String query = "INSERT INTO Trips (TripDate, TripName, Location, Price) VALUES (?, ?, ?, ?)";
-		try (PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-			ps.setDate(1, Date.valueOf(trip.getTripDate()));
-			ps.setString(2, trip.getTripName());
-			ps.setString(3, trip.getLocation());
-			ps.setInt(4, trip.getPrice());
-			ps.executeUpdate();
+	public Trip createTrip(Trip trip) throws Exception {
+		String sql = "INSERT INTO Trips (TripDate, TripName, Location, Price) VALUES (?, ?, ?, ?)";
 
-			try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+		try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			pstmt.setString(1, trip.getTripDate().toString());
+			pstmt.setString(2, trip.getTripName());
+			pstmt.setString(3, trip.getLocation());
+			pstmt.setDouble(4, trip.getPrice());
+			pstmt.executeUpdate();
+
+			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
 				if (generatedKeys.next()) {
 					trip.setTripID(generatedKeys.getInt(1));
 				}
 			}
 		}
+
+		return trip;
 	}
 
 	public Trip findById(String tripID) throws SQLException {
@@ -52,7 +50,11 @@ public class TripTable{
 			ps.setString(1, tripID);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return new Trip(rs.getDate("TripDate").toLocalDate(), rs.getString("TripName"), rs.getString("Location"), rs.getInt("Price"));
+				LocalDate tripDate = LocalDate.parse(rs.getString("TripDate"));
+				String tripName = rs.getString("TripName");
+				String location = rs.getString("Location");
+				int price = rs.getInt("Price");
+				return new Trip(tripDate, tripName, location, price);
 			}
 		}
 		return null;
@@ -84,11 +86,17 @@ public class TripTable{
 			statement.setString(1, "%" + name + "%");
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				foundTrips.add(new Trip(rs.getDate("TripDate").toLocalDate(), rs.getString("TripName"), rs.getString("Location"), rs.getInt("Price")));
+				LocalDate tripDate = LocalDate.parse(rs.getString("TripDate"));
+				String tripName = rs.getString("TripName");
+				String location = rs.getString("Location");
+				int price = rs.getInt("Price");
+				Trip trip = new Trip(tripDate, tripName, location, price);
+				foundTrips.add(trip);
 			}
 		}
 		return foundTrips;
 	}
+
 	public List<Trip> searchTripsByLocation(String location) throws SQLException {
 		List<Trip> foundTrips = new ArrayList<>();
 		String sql = "SELECT * FROM Trips WHERE Location LIKE ?";
@@ -96,11 +104,16 @@ public class TripTable{
 			statement.setString(1, "%" + location + "%");
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				foundTrips.add(new Trip(rs.getDate("TripDate").toLocalDate(), rs.getString("TripName"), rs.getString("Location"), rs.getInt("Price")));
+				LocalDate tripDate = LocalDate.parse(rs.getString("TripDate"));
+				String tripName = rs.getString("TripName");
+				int price = rs.getInt("Price");
+				Trip trip = new Trip(tripDate, tripName, location, price);
+				foundTrips.add(trip);
 			}
 		}
 		return foundTrips;
 	}
+
 	public boolean isValid(Trip trip) throws SQLException {
 		String query = "SELECT COUNT(*) FROM Trips WHERE TripID = ? AND Location = ? AND TripDate = ? AND Price = ?";
 		try (PreparedStatement ps = conn.prepareStatement(query)) {

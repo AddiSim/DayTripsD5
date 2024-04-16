@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<GridPane fx:controller="com.controller.UserController"
+<GridPane fx:controller="DayTrips.controller.UserController"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>

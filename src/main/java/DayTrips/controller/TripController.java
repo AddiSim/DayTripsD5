@@ -1,7 +1,7 @@
-package com.controller;
+package DayTrips.controller;
 
-import com.data.TripTable;
-import com.model.Trip;
+import DayTrips.data.TripTable;
+import DayTrips.model.Trip;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
